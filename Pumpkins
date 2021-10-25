@@ -1,0 +1,22 @@
+pumpkins <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-19/pumpkins.csv')
+
+pumpkins %>% 
+  mutate(weight_lbs= as.numeric(weight_lbs))%>%
+  drop_na(weight_lbs) -> pump_cl
+  
+pump_cl %>%
+  filter(country %in% c("Canada", "United States"))%>%
+  select (country, weight_lbs) %>%
+  ggplot()+
+  aes(x= country,
+      y = weight_lbs,
+      fill = country)+
+  geom_boxplot()+ 
+  labs(x= "Country", 
+       y= "Weight (lbs)",
+       fill = "Country",
+       title = "Average Weight of Pumpkins in USA vs Canada")+
+  scale_fill_viridis_d(option = "plasma")-> pump_boxplot
+pump_boxplot
+
+ggsave("pump_boxplot.png")
