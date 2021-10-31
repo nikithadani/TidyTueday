@@ -1,0 +1,47 @@
+
+library(tidyverse) # allows you to use ggplot2, readr, forcats, etc. 
+library(showtext)
+#install.packages("showtext") # To bring in text from Google
+theme_set(theme_classic()) 
+
+
+
+
+
+
+ultra_rankings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-26/ultra_rankings.csv')
+
+race <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-26/race.csv')
+```
+
+
+
+ultra_rankings %>%
+  filter (race_year_id == "68140") %>%
+  arrange(time_in_seconds) %>%
+  summarise(runner, 
+            time_in_seconds) %>%
+  slice(1:5) %>%
+  mutate(runner = fct_reorder(runner, 
+                               time_in_seconds)) %>%
+  ggplot() +
+  geom_col(aes(x = runner, 
+               y= time_in_seconds,
+               fill = runner)) +
+  
+  labs (x= "Top 5 Fastest Runners",
+        y = "Time (s)",
+        title = "Top 5 Fastest Runners in Peak District Ultras",
+        fill= "Runners") +
+  scale_fill_viridis_d(option = 'viridis') -> top_five_racers
+top_five_racers
+  
+  ggsave ("race_plot.png")
+  
+
+  
+```
+
+
+
+
