@@ -1,0 +1,26 @@
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_void())
+
+firsts <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-06-09/firsts.csv')
+
+
+firsts %>%
+  count(category) %>%
+  arrange(desc(n))%>%
+  ggplot() +
+  aes(x= fct_reorder(category, n),
+      y= n,
+      fill= category)+ 
+  geom_col(color = "black")+
+  labs(x= "Categories",
+       y= "Number of Achievements",
+       fill = "Categories",
+       title = "Number of African American Achievements from 1738-2019") +
+  geom_text(aes(x =category,
+                y = n + 3,
+                label= n))+
+  scale_fill_viridis_d(option = 'viridis') -> ach
+ach
+
+ggsave("tidy_tuesday_11-16.png", ach, width = 6.5, height = 4.5)
