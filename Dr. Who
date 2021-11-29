@@ -1,0 +1,42 @@
+---
+title: "tidy_tuesday_11-23"
+author: "Nikita Thadani"
+date: "11/28/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+episodes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-11-23/episodes.csv')
+
+theme_set(theme_linedraw())
+```
+
+
+
+```{r}
+episodes %>%
+  drop_na(season_number, rating)%>%
+  group_by(season_number) %>%
+  summarise(season_rating_average = round(mean(rating), 2)) %>%
+  ggplot()+
+  aes(x = season_number,
+      y = season_rating_average)+
+  geom_line(color = "purple")+
+  geom_text(aes(x =season_number,
+                y = season_rating_average + 0.9,
+                label= (season_rating_average)))+
+  labs(x = "Seasons",
+       y= "Average Rating",
+       title = "Average Rating Over the Course of Dr. Who") -> dr
+```
+
+
+```{r}
+ggsave("tidy_tuesday_11-23.png", dr, width = 7, height = 4.5)
+```
+
